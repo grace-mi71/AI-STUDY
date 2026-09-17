@@ -26,4 +26,3 @@ for idx in range(len(n_list)):
     if n_list[idx]>=2:
         cnt+=1
 print(cnt)
-# Please write your code here.
