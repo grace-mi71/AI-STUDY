@@ -1,68 +1,34 @@
 n = int(input())
+commands = [tuple(input().split()) for _ in range(n)]
+x = []
+dir = []
+n_list=[[0,0,'N'] for _ in range(200000)] 
+OFFSET=100000
+here=OFFSET
+result=[0,0,0]
+for num, direction in commands:
+    x.append(int(num))
+    dir.append(direction)
 
-MAX = 200000
-OFFSET = 100000
+for i in range(n):
+    if dir[i] == 'L':
+        for _ in range(x[i]):
+            n_list[here][0]+=1
+            if n_list[here][0]>=2 and n_list[here][1]>=2: n_list[here][2]='G'
+            elif n_list[here][2]!='G': n_list[here][2]='W'
+            here-=1
+        here+=1
+    elif dir[i]=='R':
+        for _ in range(x[i]):
+            n_list[here][1]+=1
+            if n_list[here][0]>=2 and n_list[here][1]>=2: n_list[here][2]='G'
+            elif n_list[here][2]!='G': n_list[here][2]='B'
+            here+=1
+        here-=1
 
-# 0: 칠하지 않음
-# 1: 흰색
-# 2: 검은색
-# 3: 회색
-color = [0] * MAX
+for color in n_list:
+    if color[2]=='W': result[0]+=1
+    elif color[2]=='B': result[1]+=1
+    elif color[2]=='G': result[2]+=1
 
-white_cnt = [0] * MAX
-black_cnt = [0] * MAX
-
-here = OFFSET
-
-for _ in range(n):
-    x, direction = input().split()
-    x = int(x)
-
-    if direction == 'L':
-        for i in range(x):
-            pos = here - i
-
-            # 이미 회색이면 색은 바뀌지 않음
-            if color[pos] == 3:
-                continue
-
-            white_cnt[pos] += 1
-
-            if white_cnt[pos] >= 2 and black_cnt[pos] >= 2:
-                color[pos] = 3
-            else:
-                color[pos] = 1
-
-        # 마지막으로 칠한 위치
-        here -= x - 1
-
-    else:  # R
-        for i in range(x):
-            pos = here + i
-
-            if color[pos] == 3:
-                continue
-
-            black_cnt[pos] += 1
-
-            if white_cnt[pos] >= 2 and black_cnt[pos] >= 2:
-                color[pos] = 3
-            else:
-                color[pos] = 2
-
-        here += x - 1
-
-
-white = 0
-black = 0
-gray = 0
-
-for c in color:
-    if c == 1:
-        white += 1
-    elif c == 2:
-        black += 1
-    elif c == 3:
-        gray += 1
-
-print(white, black, gray)
+print(*result)
